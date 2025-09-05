@@ -1,0 +1,21 @@
+-- Archivo: 04_vistas_consultas.sql
+-- Fecha: 2025/09/05
+-- Nota: Se sigue el ejemplo del documento pero se ajustan los tipos de datos.
+
+CREATE OR REPLACE VIEW V_COMERCIANTES_RESUMEN AS
+SELECT
+    c.ID,
+    c.NOMBRE,
+    c.DEPARTAMENTO,
+    c.MUNICIPIO,
+    c.TELEFONO,
+    c.CORREO,
+    c.FECHA_REGISTRO,
+    c.ESTADO,
+    COUNT(e.ID) as CANTIDAD_ESTABLECIMIENTOS,
+    NVL(SUM(e.INGRESOS), 0) as TOTAL_INGRESOS,
+    NVL(SUM(e.NUM_EMPLEADOS), 0) as TOTAL_EMPLEADOS
+FROM COMERCIANTES c
+LEFT JOIN ESTABLECIMIENTOS e ON c.ID = e.COMERCIANTE_ID
+GROUP BY c.ID, c.NOMBRE, c.DEPARTAMENTO, c.MUNICIPIO,
+         c.TELEFONO, c.CORREO, c.FECHA_REGISTRO, c.ESTADO;
